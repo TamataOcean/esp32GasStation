@@ -12,3 +12,4 @@ Follow this [link](https://randomnerdtutorials.com/installing-the-esp32-board-in
 
 # Technical info 
 [ESP32 Which GPIO pins should you use?](https://randomnerdtutorials.com/esp32-pinout-reference-gpios/)
+[ESP32 I2C Communication: Set Pins, Multiple Bus Interfaces and Peripherals](https://randomnerdtutorials.com/esp32-i2c-communication-arduino-ide/)
