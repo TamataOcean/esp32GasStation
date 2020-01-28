@@ -9,3 +9,6 @@ Follow this [link](https://randomnerdtutorials.com/installing-the-esp32-board-in
  
 # Electrical Schema
 ![Sch_Elect](https://user-images.githubusercontent.com/25310798/73075787-ff868080-3ebc-11ea-8d33-9c2de07a2205.jpg)
+
+# Technical info 
+[ESP32 Which GPIO pins should you use?](https://randomnerdtutorials.com/esp32-pinout-reference-gpios/)
