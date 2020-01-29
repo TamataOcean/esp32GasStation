@@ -22,6 +22,7 @@
 #include <PubSubClient.h>
 #include "Adafruit_CCS811.h"
 
+
 Adafruit_CCS811 ccs;
 
 const char* ssid     = "OiO";
@@ -164,7 +165,7 @@ void loop() {
         Serial.print("ppm, TVOC: ");
         Serial.println(ccs.getTVOC());
 
-        String json = "{\"user\":\"GasStation\",\"CO2\":"+(String)ccs.geteCO2()+"\",\"TVOC\":\""+(String)ccs.getTVOC()+"\"}";
+        String json = "{\"user\":\"GasStation\",\"CO2\":\""+(String)ccs.geteCO2()+"\",\"TVOC\":\""+(String)ccs.getTVOC()+"\"}";
 
         client.publish(mqtt_output, json.c_str() );
 

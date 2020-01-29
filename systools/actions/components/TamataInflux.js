@@ -75,9 +75,9 @@ class TamataInfluxDB {
       this.influx.writePoints([
          {
          measurement: measurement,
-         tags: { sensor: "CoolBoardSensors" },
+         tags: { sensor: "CCS811_Sensor" },
          fields: { 
-            user :            jsonRecord.state.reported.user,
+            user :            jsonRecord.user,
             timestamp :       Date.parse(jsonRecord.state.reported.timestamp),
             CO2:              jsonRecord.CO2,
             TVOC: jsonRecord.TVOC, 
