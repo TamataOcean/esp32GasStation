@@ -1,0 +1,21 @@
+{
+    "AppName": "Tamata Gaz Station",
+    "Version": "1.0.0",
+    "Copyright": "Copyright Open Source - W3Licence",
+    "system": {
+        "user": "GasStation",
+        "id": "CO2Station",
+        "mac": "ESP32",
+        "interval": 10,
+        "console": "",
+        "mqttServer": "localhost",
+        "mqttTopic": "esp32",
+        "influxDB": {
+            "database": "datagas",
+            "host": "localhost",
+            "port": 8086,
+            "username": "test",
+            "password": "test"
+        }
+    }
+}

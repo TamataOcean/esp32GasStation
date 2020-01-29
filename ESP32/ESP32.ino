@@ -24,10 +24,10 @@
 
 Adafruit_CCS811 ccs;
 
-const char* ssid     = "WifiRaspi";
-const char* password = "password";
-const char* mqtt_server = "10.3.141.1";
-const char* mqtt_output = "esp32/output";
+const char* ssid     = "OiO";
+const char* password = "oceanisopen";
+const char* mqtt_server = "172.24.1.1";
+const char* mqtt_output = "esp32/update";
 const char* mqtt_input = "esp32/input";
 const char* mqtt_log = "esp32/log";
 
@@ -156,18 +156,18 @@ void loop() {
   if (now - lastMsg > 5000) {
     lastMsg = now;
     
-    // Temperature in Celsius
-    int temperature = 19;
-    Serial.print("Temperature: ");
-    Serial.println(temperature);
-    client.publish(mqtt_output, "{temperature:18}" );
-
+    
     if(ccs.available()){
       if(!ccs.readData()){
         Serial.print("CO2: ");
         Serial.print(ccs.geteCO2());
         Serial.print("ppm, TVOC: ");
-        Serial.print(ccs.getTVOC());
+        Serial.println(ccs.getTVOC());
+
+        String json = "{\"user\":\"GasStation\",\"CO2\":"+(String)ccs.geteCO2()+"\",\"TVOC\":\""+(String)ccs.getTVOC()+"\"}";
+
+        client.publish(mqtt_output, json.c_str() );
+
       }
       else{
         Serial.println("ERROR!");
