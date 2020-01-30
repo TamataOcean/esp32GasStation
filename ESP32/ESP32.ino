@@ -25,14 +25,15 @@
 
 Adafruit_CCS811 ccs;
 
-const char* ssid     = "OiO";
-const char* password = "oceanisopen";
-const char* mqtt_server = "172.24.1.1";
+const char* ssid     = "WifiRaspi";
+const char* password = "password";
+const char* mqtt_server = "10.3.141.1";
 const char* mqtt_output = "esp32/update";
 const char* mqtt_input = "esp32/input";
 const char* mqtt_log = "esp32/log";
 
 const int ledPin = 4;
+int timeInterval = 5000;
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -57,8 +58,12 @@ void setup()
 
     if(!ccs.begin()){
       Serial.println("Failed to start sensor! Please check your wiring.");
-      //while(1);
-  }
+      while(1);
+    }
+    else
+    {
+      Serial.println("CCS811 started");
+    }
 }
 
 /* ------------------------
@@ -92,6 +97,16 @@ void callback(char* topic, byte* message, unsigned int length) {
       Serial.println("off");
       client.publish(mqtt_log, "changing to OFF" );
       digitalWrite(ledPin, LOW);
+    }
+    else if(messageTemp == "timeInterval_1000") {
+      Serial.println("Time Interval order received");
+      timeInterval = 1000;
+      client.publish(mqtt_log, "Interval set to 1000" );
+    }
+    else if(messageTemp == "timeInterval_5000") {
+      Serial.println("Time Interval order received");
+      timeInterval = 5000;
+      client.publish(mqtt_log, "Interval set to 5000" );
     }
   }
 }
@@ -154,7 +169,7 @@ void loop() {
   client.loop();
 
   long now = millis();
-  if (now - lastMsg > 5000) {
+  if (now - lastMsg > timeInterval ) {
     lastMsg = now;
     
     
@@ -171,7 +186,7 @@ void loop() {
 
       }
       else{
-        Serial.println("ERROR!");
+        Serial.println("ERROR on CCS811 !");
         //while(1);
       }
     }
