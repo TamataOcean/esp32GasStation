@@ -12,7 +12,6 @@ var jsonfile = require('jsonfile')
 jsonfile.spaces = 4;
 
 var mqtt = require('mqtt'); //includes mqtt server 
-var moment = require('moment')
 
 const TamataInfluxDB = require('./actions/components/TamataInflux')
 var jsonConfig ;
