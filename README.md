@@ -1,5 +1,5 @@
-# esp32SensorHub
-Tutorial to use ESP32 to send sensors information other Mqtt ( inpired by [RandomerTutorial](https://randomnerdtutorials.com/esp32-mqtt-publish-subscribe-arduino-ide/) )
+# esp32GasStation using CCS811
+Tutorial to use ESP32 to send CO2 & TVOC information other Mqtt ( inpired by [RandomerTutorial](https://randomnerdtutorials.com/esp32-mqtt-publish-subscribe-arduino-ide/) )
 
 # Install Arduino lib for ESP32
 Follow this [link](https://randomnerdtutorials.com/installing-the-esp32-board-in-arduino-ide-windows-instructions/)
