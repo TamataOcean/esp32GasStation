@@ -9,7 +9,7 @@
         "interval": 10,
         "console": "",
         "mqttServer": "localhost",
-        "mqttTopic": "esp32",
+        "mqttTopic": "esp32/update",
         "influxDB": {
             "database": "datagas",
             "host": "localhost",
