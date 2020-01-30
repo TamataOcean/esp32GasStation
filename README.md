@@ -8,7 +8,7 @@ Follow this [link](https://randomnerdtutorials.com/installing-the-esp32-board-in
 ![Sch_Fonctionnal](https://user-images.githubusercontent.com/25310798/73060571-6b0a2700-3e98-11ea-8de7-cf990ef746e2.jpg)
  
 # Electrical Schema
-![Sch_Elect](https://user-images.githubusercontent.com/25310798/73075787-ff868080-3ebc-11ea-8d33-9c2de07a2205.jpg)
+![Sch_Elect](https://github.com/RomainTourte/esp32SensorHub/blob/master/ESP32/Sch_ESP32_CCS811_bb.jpg)
 
 # Technical info 
 [ESP32 Which GPIO pins should you use?](https://randomnerdtutorials.com/esp32-pinout-reference-gpios/)
