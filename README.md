@@ -11,5 +11,6 @@ Follow this [link](https://randomnerdtutorials.com/installing-the-esp32-board-in
 ![Sch_Elect](https://github.com/TamataOcean/esp32GasStation/blob/master/ESP32/Sch_ESP32_CCS811_bb.jpg)
 
 # Technical info 
-[ESP32 Which GPIO pins should you use?](https://randomnerdtutorials.com/esp32-pinout-reference-gpios/)
-[ESP32 I2C Communication: Set Pins, Multiple Bus Interfaces and Peripherals](https://randomnerdtutorials.com/esp32-i2c-communication-arduino-ide/)
+[ESP32 Which GPIO pins should you use?](https://randomnerdtutorials.com/esp32-pinout-reference-gpios/)   
+[ESP32 I2C Communication: Set Pins, Multiple Bus Interfaces and Peripherals](https://randomnerdtutorials.com/esp32-i2c-communication-arduino-ide/).  
+[ESP32 Heltel with OLED Screen](https://robotzero.one/heltec-wifi-kit-32/)
