@@ -214,6 +214,7 @@ void loop() {
         // String json = "{\"user\":\""+(String)mqtt_user+"\",\"Humidity\":\""+(String)sensorBME280.readFloatHumidity()+"\",\"Pressure\":\""+(String)sensorBME280.readFloatPressure()+"\",\"Altitude\":\""+(String)sensorBME280.readFloatAltitudeMeters()+"\",\"Temperature\":\""+(String)sensorBME280.readTempC()+"\"}";
         String json = "{\"user\":\""+(String)mqtt_user+"\",\"CO2\":\""+(String)ccs.geteCO2()+"\",\"TVOC\":\""+(String)ccs.getTVOC()+"\",\"Humidity\":\""+(String)sensorBME280.readFloatHumidity()+"\",\"Pressure\":\""+(String)sensorBME280.readFloatPressure()+"\",\"Altitude\":\""+(String)sensorBME280.readFloatAltitudeMeters()+"\",\"Temperature\":\""+(String)sensorBME280.readTempC()+"\"}";
         client.publish(mqtt_output, json.c_str() );
+        Serial.println("Mqtt sent to : " + (String)mqtt_output );
         Serial.println(json);
       }
       else{
