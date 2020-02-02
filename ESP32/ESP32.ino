@@ -21,16 +21,18 @@
 #include <WiFi.h>
 #include <PubSubClient.h>
 #include "Adafruit_CCS811.h"
+#include "SparkFunBME280.h"
 
-
+BME280 sensorBME280;
 Adafruit_CCS811 ccs;
 
-const char* ssid     = "WifiRaspi";
-const char* password = "password";
-const char* mqtt_server = "10.3.141.1";
+const char* ssid     = "OiO";
+const char* password = "oceanisopen";
+const char* mqtt_server = "172.24.1.1";
 const char* mqtt_output = "esp32/update";
 const char* mqtt_input = "esp32/input";
 const char* mqtt_log = "esp32/log";
+const char* mqtt_user = "GasStation";
 
 const int ledPin = 4;
 int timeInterval = 5000;
@@ -55,8 +57,7 @@ void setup()
     client.setCallback(callback);
 
     Serial.println("CCS811 begin");
-
-    if(!ccs.begin()){
+    if(!ccs.begin(0x5A)){
       Serial.println("Failed to start sensor! Please check your wiring.");
       while(1);
     }
@@ -64,6 +65,22 @@ void setup()
     {
       Serial.println("CCS811 started");
     }
+
+
+    Serial.println("BME280 begin");
+    // I2C device found at address 0x76
+    Wire.begin();
+    if (sensorBME280.beginI2C() == false) //Begin communication over I2C
+    {
+      Serial.println("The sensor did not respond. Please check wiring.");
+      while(1); //Freeze
+    }
+    else
+    {
+      Serial.println("BME280 started & configured");
+
+    }
+
 }
 
 /* ------------------------
@@ -172,18 +189,32 @@ void loop() {
   if (now - lastMsg > timeInterval ) {
     lastMsg = now;
     
+    Serial.print("Humidity: ");
+    Serial.print(sensorBME280.readFloatHumidity(), 0);
     
+    Serial.print(" Pressure: ");
+    Serial.print(sensorBME280.readFloatPressure(), 0);
+    
+    Serial.print(" Alt: ");
+    //Serial.print(sensorBME280.readFloatAltitudeMeters(), 1);
+    Serial.print(sensorBME280.readFloatAltitudeFeet(), 1);
+    
+    Serial.print(" Temp: ");
+    //Serial.print(sensorBME280.readTempC(), 2);
+    Serial.print(sensorBME280.readTempC(), 2);
+    
+    Serial.println();
+
     if(ccs.available()){
       if(!ccs.readData()){
         Serial.print("CO2: ");
         Serial.print(ccs.geteCO2());
         Serial.print("ppm, TVOC: ");
         Serial.println(ccs.getTVOC());
-
-        String json = "{\"user\":\"GasStation\",\"CO2\":\""+(String)ccs.geteCO2()+"\",\"TVOC\":\""+(String)ccs.getTVOC()+"\"}";
-
+        // String json = "{\"user\":\""+(String)mqtt_user+"\",\"Humidity\":\""+(String)sensorBME280.readFloatHumidity()+"\",\"Pressure\":\""+(String)sensorBME280.readFloatPressure()+"\",\"Altitude\":\""+(String)sensorBME280.readFloatAltitudeMeters()+"\",\"Temperature\":\""+(String)sensorBME280.readTempC()+"\"}";
+        String json = "{\"user\":\""+(String)mqtt_user+"\",\"CO2\":\""+(String)ccs.geteCO2()+"\",\"TVOC\":\""+(String)ccs.getTVOC()+"\",\"Humidity\":\""+(String)sensorBME280.readFloatHumidity()+"\",\"Pressure\":\""+(String)sensorBME280.readFloatPressure()+"\",\"Altitude\":\""+(String)sensorBME280.readFloatAltitudeMeters()+"\",\"Temperature\":\""+(String)sensorBME280.readTempC()+"\"}";
         client.publish(mqtt_output, json.c_str() );
-
+        Serial.println(json);
       }
       else{
         Serial.println("ERROR on CCS811 !");
