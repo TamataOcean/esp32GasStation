@@ -18,3 +18,19 @@ Follow this [link](https://randomnerdtutorials.com/installing-the-esp32-board-in
 [ESP32 I2C Communication: Set Pins, Multiple Bus Interfaces and Peripherals](https://randomnerdtutorials.com/esp32-i2c-communication-arduino-ide/).  
 [ESP32 Heltel with OLED Screen](https://robotzero.one/heltec-wifi-kit-32/)
 
+# Safe levels of CO2 & TVOC:   
+    CO2 (equivalent calculated carbon-dioxide)
+    350-1,000ppm                   Concentrations typical of occupied indoor spaces with good air exchange
+    1,000-2,000ppm                 Complaints of drowsiness and poor air.
+    2,000-5,000 ppm                Headaches, sleepiness and stagnant, stale, stuffy air. Poor concentration, loss of attention, increased heart rate and slight nausea may also be present.
+
+    _______________________________________________________________________________________________________________________________________________________________________
+    TVOC (Total Volatile Organic Compound)
+    If TVOCs are present, an overall concentration will be reported. While there are no exposure limits for TVOCs some guidelines have been recommended. Generally, TVOC concentrations between 50 parts per billion (ppb) and 325 ppb are thought to be acceptable
+
+    Household product which emit TVOC:
+    Paints, paint strippers and other solvents, wood preservatives, aerosol sprays, cleansers and disinfectants, moth repellents and air fresheners, stored fuels and automotive products, hobby supplies, dry-cleaned clothing, pesticide, other products, including:
+
+    Building materials and furnishings which emit TVOC:
+    Office equipment such as copiers and printers, correction fluids and carbonless copy paper, graphics and craft materials including glues and adhesives, permanent markers and photographic solutions.
+    _______________________________________________________________________________________________________________________________________________________________________
