@@ -37,7 +37,7 @@ class TamataInfluxDB {
                   Temperature:    FieldType.FLOAT
 
                },
-               tags: [ 'sensor' ]
+               tags: [ 'sensor', 'user' ]
                }
             ]
          });
@@ -73,7 +73,7 @@ class TamataInfluxDB {
    saveSensor(jsonRecord, jsonPosition ) {    
       this.influx.writePoints([
          {
-         tags: { sensor: "teensySensors" },
+	 tags: { sensor: "teensySensors", user: jsonRecord.user },
          measurement : "sensor",
          fields: { 
             user:    jsonRecord.user,

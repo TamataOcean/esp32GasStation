@@ -1,0 +1,13 @@
+# DELETE OUTLIER DATA ( TEMPERATURE < -50 / CO2 > 10000 )
+# SELECT AVERRANT VALUE FOR CO2
+curl -G 'http://localhost:8086/query?db=datagas' --data-urlencode "q=SELECT * FROM sensor WHERE CO2 > 10000" |  jq -r "(.results[0].series[0].values[][0])" > delete_timestamps.txt
+
+
+# SELECT AVERRANT VALUE FOR TEMPERATURE 
+curl -G 'http://localhost:8086/query?db=datagas' --data-urlencode "q=select * from sensor where Temperature < -50" |  jq -r "(.results[0].series[0].values[][0])" > delete_timestamps.txt
+
+for i in $(cat delete_timestamps.txt); do
+  echo $i;
+  curl -G 'http://localhost:8086/query?db=datagas' \
+    --data-urlencode "q=DELETE FROM sensor WHERE time='$i'"; 
+done
