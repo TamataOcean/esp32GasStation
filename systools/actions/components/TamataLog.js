@@ -69,9 +69,7 @@ class TamataLog {
          measurement : "log",
          fields: { 
             user:       jsonRecord.user,
-            logMessage: jsonRecord.logMessage,
-            logType:    jsonRecord.logType
-            }  
+            logMessage: jsonRecord.logMessage            }  
          }]).catch(err => {
             console.error(`Error saving log data to InfluxDB! ${err.stack}`);
             return;
