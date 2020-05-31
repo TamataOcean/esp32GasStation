@@ -32,10 +32,10 @@ const char* mqtt_server = "172.24.1.1";
 const char* mqtt_output = "esp32/update";
 const char* mqtt_input = "esp32/input";
 const char* mqtt_log = "esp32/log";
-const char* mqtt_user = "GasStation";
+const char* mqtt_user = "GasStation_Bureau";
 
 const int ledPin = 4;
-int timeInterval = 5000;
+int timeInterval = 7500;
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -158,6 +158,7 @@ void setup_wifi() {
 void reconnect() {
   // Loop until we're reconnected
   while (!client.connected()) {
+    delay(100);
     Serial.print("Attempting MQTT connection...");
     // Attempt to connect
     if (client.connect("ESP8266Client")) {
@@ -169,7 +170,7 @@ void reconnect() {
       Serial.print(client.state());
       Serial.println(" try again in 5 seconds");
       // Wait 5 seconds before retrying
-      delay(5000);
+      delay(3000);
     }
   }
 }
@@ -180,15 +181,15 @@ void reconnect() {
  *  ------------------
  */
 void loop() {
-  if (!client.connected()) {
-    reconnect();
-  }
-  client.loop();
-
+  
   long now = millis();
   if (now - lastMsg > timeInterval ) {
     lastMsg = now;
-    
+    if (!client.connected()) {
+      reconnect();
+    }
+    client.loop();
+  
     Serial.print("Humidity: ");
     Serial.print(sensorBME280.readFloatHumidity(), 0);
     
@@ -214,11 +215,19 @@ void loop() {
         // String json = "{\"user\":\""+(String)mqtt_user+"\",\"Humidity\":\""+(String)sensorBME280.readFloatHumidity()+"\",\"Pressure\":\""+(String)sensorBME280.readFloatPressure()+"\",\"Altitude\":\""+(String)sensorBME280.readFloatAltitudeMeters()+"\",\"Temperature\":\""+(String)sensorBME280.readTempC()+"\"}";
         String json = "{\"user\":\""+(String)mqtt_user+"\",\"CO2\":\""+(String)ccs.geteCO2()+"\",\"TVOC\":\""+(String)ccs.getTVOC()+"\",\"Humidity\":\""+(String)sensorBME280.readFloatHumidity()+"\",\"Pressure\":\""+(String)sensorBME280.readFloatPressure()+"\",\"Altitude\":\""+(String)sensorBME280.readFloatAltitudeMeters()+"\",\"Temperature\":\""+(String)sensorBME280.readTempC()+"\"}";
         client.publish(mqtt_output, json.c_str() );
+        client.disconnect();
+
         Serial.println("Mqtt sent to : " + (String)mqtt_output );
         Serial.println(json);
       }
       else{
-        Serial.println("ERROR on CCS811 !");
+        String errorMsg = "ERROR on CCS811 !";
+        String json = "{\"user\":\""+(String)mqtt_user+"\",\"errorMsg \":\""+errorMsg +"\"}";
+        client.publish(mqtt_log, json.c_str() );
+        client.disconnect();
+
+        Serial.println("Mqtt sent to : " + (String)mqtt_log );
+        Serial.println(errorMsg);
         //while(1);
       }
     }
