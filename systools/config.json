@@ -10,8 +10,16 @@
         "console": "",
         "mqttServer": "localhost",
         "mqttTopic": "esp32/update",
+        "mqttTopicLog": "esp32/log",
         "influxDB": {
             "database": "datagas",
+            "host": "localhost",
+            "port": 8086,
+            "username": "test",
+            "password": "test"
+        },
+        "influxDB_log": {
+            "database": "datagas_log",
             "host": "localhost",
             "port": 8086,
             "username": "test",

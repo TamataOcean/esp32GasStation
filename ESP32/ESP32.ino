@@ -222,12 +222,13 @@ void loop() {
       }
       else{
         String errorMsg = "ERROR on CCS811 !";
-        String json = "{\"user\":\""+(String)mqtt_user+"\",\"errorMsg \":\""+errorMsg +"\"}";
+        String logType = "ERROR";
+        String json = "{\"user\":\""+(String)mqtt_user +"\",\"logType\":\""+logType+"\",\"logMessage\":\""+errorMsg +"\"}";
         client.publish(mqtt_log, json.c_str() );
         client.disconnect();
 
         Serial.println("Mqtt sent to : " + (String)mqtt_log );
-        Serial.println(errorMsg);
+        Serial.println(json);
         //while(1);
       }
     }

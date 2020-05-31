@@ -35,15 +35,14 @@ class TamataInfluxDB {
                   Pressure:    FieldType.FLOAT,
                   Altitude:    FieldType.FLOAT,
                   Temperature:    FieldType.FLOAT
-
                },
-               tags: [ 'sensor', 'user' ]
+               tags: [ 'sensor', 'user', 'logType' ]
                }
             ]
          });
    };
 
-   save( jsonRecord ) {
+   saveData( jsonRecord ) {
       if (DEBUG) console.log('InfluxDB save function...');
 
       this.influx.getDatabaseNames()
@@ -92,6 +91,54 @@ class TamataInfluxDB {
             console.log('\n');
          });
    }
+
+   saveLog( jsonRecord ) {
+      if (DEBUG) console.log('InfluxDB save Log function...');
+
+      this.influx.getDatabaseNames()
+      .then(names => {
+       if ( !names.includes(this.config.database) ) {
+         if (DEBUG) console.log('First connection... create database '+ this.config.database);
+         
+         this.influx.createUser('test', 'test').then( ()=> {
+            return this.influx.createDatabase(this.config.database)
+         } );  
+       }
+      })
+      .then( () => {
+         if (DEBUG) console.log('database : ' + this.config.database + ' found');
+         if (DEBUG) console.log('jsonRecord = '+ JSON.stringify(jsonRecord) );
+
+         this.saveLogData(jsonRecord);
+      })
+      .catch(err => {
+          console.error(`Error creating Influx database!`)
+          console.log(`${err.stack}`);
+          return;
+      });
+      // body...
+   }
+
+   saveLogData(jsonRecord) {    
+      this.influx.writePoints([
+         {
+	      tags: { logType: jsonRecord.logType , user: jsonRecord.user },
+         measurement : "log",
+         fields: { 
+            user:       jsonRecord.user,
+            logMessage: jsonRecord.logMessage,
+            logType:    jsonRecord.logType
+            }  
+         }]).catch(err => {
+            console.error(`Error saving log data to InfluxDB! ${err.stack}`);
+            return;
+         }).then( () => {
+            console.log('Log message pushed to InFlux'  );
+            console.log('\n');
+         });
+   }
 }
+
+
 
 module.exports = TamataInfluxDB;
