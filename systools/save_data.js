@@ -14,6 +14,8 @@
 
 	var mqtt = require('mqtt'); //includes mqtt server 
 	const TamataInfluxDB = require('./actions/components/TamataInflux')
+	const TamataLog = require('./actions/components/TamataLog')
+
 
 	var configFile = "config.json";
 	var jsonConfig ;
@@ -64,8 +66,8 @@
 		/* Managing Error Log Message */
 		clientLog = mqtt.connect('mqtt://' + jsonConfig.system.mqttServer );
 		clientLog.subscribe (jsonConfig.system.mqttTopicLog );
-		client.on('connect', () => { console.log('Mqtt connected to ' + jsonConfig.system.mqttServer + "/ Topic : " + jsonConfig.system.mqttTopicLog  )} )
-		client.on('message', insertLog );
+		clientLog.on('connect', () => { console.log('Mqtt connected to ' + jsonConfig.system.mqttServer + "/ Topic : " + jsonConfig.system.mqttTopicLog  )} )
+		clientLog.on('message', insertLog );
 
 	}
 
@@ -96,7 +98,7 @@
 		if (DEBUG) console.log('Mqtt Message received : ' + message );
 
 		/* INSERT to influx database */
-		influx = new TamataInfluxDB( jsonConfig.system.influxDB_log );
+		influx = new TamataLog( jsonConfig.system.influxDB_log );
 		influx.saveLog( parsedMessage );
 
 		if (DEBUG) console.log('Inserted log : ' + JSON.stringify(parsedMessage) ) ;

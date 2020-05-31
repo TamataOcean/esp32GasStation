@@ -5,7 +5,7 @@ const Influx = require('influx')
 const FieldType = Influx.FieldType;
 
 
-class TamataInfluxDB {
+class TamataLog {
    constructor ( jsonObject ) {
       this.config = jsonObject;
       console.log('InfluxDB constructor...');
@@ -84,4 +84,4 @@ class TamataInfluxDB {
 
 
 
-module.exports = TamataInfluxDB;
+module.exports = TamataLog;
