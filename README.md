@@ -1,4 +1,4 @@
-# esp32GasStation using CCS811
+# esp32GasStation using CCS811 & BME280
 Tutorial to use ESP32 to send CO2 & TVOC information other Mqtt ( inpired by [RandomerTutorial](https://randomnerdtutorials.com/esp32-mqtt-publish-subscribe-arduino-ide/) )
 
 # Install Arduino lib for ESP32
