@@ -8,7 +8,7 @@ Follow this [link](https://randomnerdtutorials.com/installing-the-esp32-board-in
 ![Sch_Fonctionnal](https://user-images.githubusercontent.com/25310798/73060571-6b0a2700-3e98-11ea-8de7-cf990ef746e2.jpg)
  
 # Electrical Schema
-![Sch_Elect](https://github.com/TamataOcean/esp32GasStation/blob/master/ESP32/Sch_ESP32_CCS811_bb.jpg)
+![ESP32_BME280_bb](https://user-images.githubusercontent.com/25310798/86024869-d0f17080-ba2d-11ea-98a7-3ce7bb2fa018.png)
 
 # CO2 Information 
 [CO2 & ppm information](https://www.experts-environnement.fr/augmentation-du-co2-dans-les-logements-a-cause-dun-systeme-de-ventilation-defectueux/)
