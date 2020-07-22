@@ -105,6 +105,7 @@ void callback(char* topic, byte* message, unsigned int length) {
   // Changes the output state according to the message
   if (String(topic) == mqtt_input ) {
     Serial.print("Changing output to ");
+
     if(messageTemp == "on"){
       Serial.println("on");
       client.publish(mqtt_log, "changing to ON" );
@@ -125,6 +126,14 @@ void callback(char* topic, byte* message, unsigned int length) {
       timeInterval = 5000;
       client.publish(mqtt_log, "Interval set to 5000" );
     }
+
+    else if(messageTemp == "reboot") {
+      Serial.println("Reboot order received");
+      String msg = "Reboot for : " + (String)mqtt_user;
+      client.publish(mqtt_log, msg.c_str() );
+      ESP.restart();
+    }
+
   }
 }
 
@@ -197,11 +206,10 @@ void loop() {
     Serial.print(sensorBME280.readFloatPressure(), 0);
     
     Serial.print(" Alt: ");
-    //Serial.print(sensorBME280.readFloatAltitudeMeters(), 1);
-    Serial.print(sensorBME280.readFloatAltitudeFeet(), 1);
+    Serial.print(sensorBME280.readFloatAltitudeMeters(), 1);
+    //Serial.print(sensorBME280.readFloatAltitudeFeet(), 1);
     
     Serial.print(" Temp: ");
-    //Serial.print(sensorBME280.readTempC(), 2);
     Serial.print(sensorBME280.readTempC(), 2);
     
     Serial.println();

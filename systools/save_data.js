@@ -90,7 +90,7 @@
 
 	/***************************************
 	- function insertLog(topic, message)
-	Parse message & position and INSERT into Database */
+	Parse log message and INSERT into Database */
 	async function insertLog(topic,message) {
 		var parsedMessage = JSON.parse(message);
 
