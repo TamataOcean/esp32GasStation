@@ -26,13 +26,17 @@
 BME280 sensorBME280;
 Adafruit_CCS811 ccs;
 
-const char* ssid     = "OiO";
-const char* password = "oceanisopen";
+// const char* ssid     = "OiO";
+// const char* password = "oceanisopen";
+// const char* mqtt_server = "172.24.1.1";
+
+const char* ssid     = "WifiRaspi";
+const char* password = "wifiraspi";
 const char* mqtt_server = "172.24.1.1";
 const char* mqtt_output = "esp32/update";
 const char* mqtt_input = "esp32/input";
 const char* mqtt_log = "esp32/log";
-const char* mqtt_user = "GasStation_Bureau";
+const char* mqtt_user = "ESP32_TEST";
 
 const int ledPin = 4;
 int timeInterval = 7500;
@@ -49,12 +53,13 @@ int value = 0;
  */
 void setup()
 {
-    Serial.begin(115200);
+    Serial.begin(9600);
     delay(10);
 
     setup_wifi();
     client.setServer(mqtt_server, 1883);
     client.setCallback(callback);
+
 
     Serial.println("CCS811 begin");
     if(!ccs.begin(0x5A)){
@@ -107,11 +112,11 @@ void callback(char* topic, byte* message, unsigned int length) {
     Serial.print("Changing output to ");
 
     if(messageTemp == "on"){
-      Serial.println("on");
+      Serial.println("MessageTemp = on");
       client.publish(mqtt_log, "changing to ON" );
       digitalWrite(ledPin, HIGH);
     }
-    else if(messageTemp == "off"){
+    else if(messageTemp == "Message Temp = off"){
       Serial.println("off");
       client.publish(mqtt_log, "changing to OFF" );
       digitalWrite(ledPin, LOW);
@@ -207,7 +212,6 @@ void loop() {
     
     Serial.print(" Alt: ");
     Serial.print(sensorBME280.readFloatAltitudeMeters(), 1);
-    //Serial.print(sensorBME280.readFloatAltitudeFeet(), 1);
     
     Serial.print(" Temp: ");
     Serial.print(sensorBME280.readTempC(), 2);
@@ -223,7 +227,7 @@ void loop() {
         // String json = "{\"user\":\""+(String)mqtt_user+"\",\"Humidity\":\""+(String)sensorBME280.readFloatHumidity()+"\",\"Pressure\":\""+(String)sensorBME280.readFloatPressure()+"\",\"Altitude\":\""+(String)sensorBME280.readFloatAltitudeMeters()+"\",\"Temperature\":\""+(String)sensorBME280.readTempC()+"\"}";
         String json = "{\"user\":\""+(String)mqtt_user+"\",\"CO2\":\""+(String)ccs.geteCO2()+"\",\"TVOC\":\""+(String)ccs.getTVOC()+"\",\"Humidity\":\""+(String)sensorBME280.readFloatHumidity()+"\",\"Pressure\":\""+(String)sensorBME280.readFloatPressure()+"\",\"Altitude\":\""+(String)sensorBME280.readFloatAltitudeMeters()+"\",\"Temperature\":\""+(String)sensorBME280.readTempC()+"\"}";
         client.publish(mqtt_output, json.c_str() );
-        client.disconnect();
+        //client.disconnect();
 
         Serial.println("Mqtt sent to : " + (String)mqtt_output );
         Serial.println(json);
@@ -233,11 +237,13 @@ void loop() {
         String logType = "ERROR";
         String json = "{\"user\":\""+(String)mqtt_user +"\",\"logType\":\""+logType+"\",\"logMessage\":\""+errorMsg +"\"}";
         client.publish(mqtt_log, json.c_str() );
-        client.disconnect();
+        //client.disconnect();
 
-        Serial.println("Mqtt sent to : " + (String)mqtt_log );
-        Serial.println(json);
-        //while(1);
+        // Serial.println("Mqtt sent to : " + (String)mqtt_log );
+        // Serial.println(json);
+        // //while(1);
+        // Serial.println("Restarting... ");
+        // //ESP.restart();
       }
     }
   delay(500);
