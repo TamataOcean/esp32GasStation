@@ -70,6 +70,7 @@ class TamataInfluxDB {
       // body...
    }
 
+   
    saveSensor(jsonRecord, jsonPosition ) {    
       this.influx.writePoints([
          {
