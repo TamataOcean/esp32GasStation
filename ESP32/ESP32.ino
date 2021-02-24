@@ -23,6 +23,15 @@
 #include "Adafruit_CCS811.h"
 #include "SparkFunBME280.h"
 
+// DS18B20 Library
+#include <OneWire.h> 
+#include <DallasTemperature.h>
+
+// DEfine the WIRE onto ESP32
+#define ONE_WIRE_BUS 4 
+OneWire oneWire(ONE_WIRE_BUS); 
+DallasTemperature sensorDS18B20(&oneWire);
+
 BME280 sensorBME280;
 Adafruit_CCS811 ccs;
 
@@ -53,14 +62,14 @@ int value = 0;
  */
 void setup()
 {
-    Serial.begin(9600);
+    Serial.begin(115200);
     delay(10);
 
     setup_wifi();
     client.setServer(mqtt_server, 1883);
     client.setCallback(callback);
 
-
+    //CO2 Sensors 
     Serial.println("CCS811 begin");
     if(!ccs.begin(0x5A)){
       Serial.println("Failed to start sensor! Please check your wiring.");
@@ -71,6 +80,9 @@ void setup()
       Serial.println("CCS811 started");
     }
 
+    //DS18B20 Sensor
+    Serial.println("DS18B20 Dallas Temperature begin"); 
+    sensorDS18B20.begin(); 
 
     Serial.println("BME280 begin");
     // I2C device found at address 0x76
@@ -83,9 +95,124 @@ void setup()
     else
     {
       Serial.println("BME280 started & configured");
-
     }
 
+}
+
+
+/* 
+ *  ------------------
+ *  MAIN LOOP
+ *  ------------------
+ */
+void loop() {
+  
+  long now = millis();
+  if (now - lastMsg > timeInterval ) {
+    lastMsg = now;
+    if (!client.connected()) {
+      reconnect();
+    }
+    client.loop();
+  
+    Serial.print(" Requesting temperatures..."); 
+    sensorDS18B20.requestTemperatures();
+    Serial.println("DONE"); 
+
+    Serial.print(" Water Temperature : ");
+    Serial.print(sensorDS18B20.getTempCByIndex(0), 2);
+    
+    Serial.print(" Air Temperature : ");
+    Serial.print(sensorBME280.readTempC(), 2);
+
+    Serial.print(" Humidity: ");
+    Serial.print(sensorBME280.readFloatHumidity(), 0);
+    
+    Serial.print(" Pressure: ");
+    Serial.print(sensorBME280.readFloatPressure(), 0);
+    
+    Serial.print(" Altitude : ");
+    Serial.print(sensorBME280.readFloatAltitudeMeters(), 1);
+    Serial.println();
+
+    if(ccs.available()){
+      if(!ccs.readData()){
+        Serial.print("CO2: ");
+        Serial.print(ccs.geteCO2());
+        Serial.print("ppm, TVOC: ");
+        Serial.println(ccs.getTVOC());
+        // String json = "{\"user\":\""+(String)mqtt_user+"\",\"Humidity\":\""+(String)sensorBME280.readFloatHumidity()+"\",\"Pressure\":\""+(String)sensorBME280.readFloatPressure()+"\",\"Altitude\":\""+(String)sensorBME280.readFloatAltitudeMeters()+"\",\"Temperature\":\""+(String)sensorBME280.readTempC()+"\"}";
+        String json = "{\"user\":\""+(String)mqtt_user+"\",\"CO2\":\""+(String)ccs.geteCO2()+"\",\"TVOC\":\""+(String)ccs.getTVOC()+"\",\"Humidity\":\""+(String)sensorBME280.readFloatHumidity()+"\",\"Pressure\":\""+(String)sensorBME280.readFloatPressure()+"\",\"Altitude\":\""+(String)sensorBME280.readFloatAltitudeMeters()+"\",\"AirTemperature\":\""+(String)sensorBME280.readTempC()+"\",\"WaterTemperature\":\""+(String)sensorDS18B20.getTempCByIndex(0)+"\"}";
+        client.publish(mqtt_output, json.c_str() );
+        //client.disconnect();
+
+        Serial.println("Mqtt sent to : " + (String)mqtt_output );
+        Serial.println(json);
+      }
+      else{
+        String errorMsg = "ERROR on CCS811 !";
+        String logType = "ERROR";
+        String json = "{\"user\":\""+(String)mqtt_user +"\",\"logType\":\""+logType+"\",\"logMessage\":\""+errorMsg +"\"}";
+        client.publish(mqtt_log, json.c_str() );
+        //client.disconnect();
+
+        // Serial.println("Mqtt sent to : " + (String)mqtt_log );
+        // Serial.println(json);
+        // //while(1);
+        // Serial.println("Restarting... ");
+        // //ESP.restart();
+      }
+    }
+  delay(500);
+
+  }
+}
+
+/* ----------------------
+ *  WIFI SETUP 
+ *  ---------------------
+ */
+void setup_wifi() {
+  delay(10);
+  // We start by connecting to a WiFi network
+  Serial.println();
+  Serial.print("Connecting to ");
+  Serial.println(ssid);
+
+  WiFi.begin(ssid, password);
+
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println("WiFi connected");
+  Serial.println("IP address: ");
+  Serial.println(WiFi.localIP());
+}
+
+/* 
+ *  ------------------
+ *  RECONNECT MQTT
+ *  ------------------
+ */
+void reconnect() {
+  // Loop until we're reconnected
+  while (!client.connected()) {
+    delay(100);
+    Serial.print("Attempting MQTT connection...");
+    // Attempt to connect
+    if (client.connect("ESP8266Client")) {
+      Serial.println("connected");
+      // Subscribe
+      client.subscribe(mqtt_input);
+    } else {
+      Serial.print("failed, rc=");
+      Serial.print(client.state());
+      Serial.println(" try again in 5 seconds");
+      // Wait 5 seconds before retrying
+      delay(3000);
+    }
+  }
 }
 
 /* ------------------------
@@ -138,115 +265,6 @@ void callback(char* topic, byte* message, unsigned int length) {
       client.publish(mqtt_log, msg.c_str() );
       ESP.restart();
     }
-
-  }
-}
-
-/* ----------------------
- *  WIFI SETUP 
- *  ---------------------
- */
-void setup_wifi() {
-  delay(10);
-  // We start by connecting to a WiFi network
-  Serial.println();
-  Serial.print("Connecting to ");
-  Serial.println(ssid);
-
-  WiFi.begin(ssid, password);
-
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
-  }
-  Serial.println("WiFi connected");
-  Serial.println("IP address: ");
-  Serial.println(WiFi.localIP());
-}
-
-/* 
- *  ------------------
- *  RECONNECT MQTT
- *  ------------------
- */
-void reconnect() {
-  // Loop until we're reconnected
-  while (!client.connected()) {
-    delay(100);
-    Serial.print("Attempting MQTT connection...");
-    // Attempt to connect
-    if (client.connect("ESP8266Client")) {
-      Serial.println("connected");
-      // Subscribe
-      client.subscribe(mqtt_input);
-    } else {
-      Serial.print("failed, rc=");
-      Serial.print(client.state());
-      Serial.println(" try again in 5 seconds");
-      // Wait 5 seconds before retrying
-      delay(3000);
-    }
-  }
-}
-
-/* 
- *  ------------------
- *  MAIN LOOP
- *  ------------------
- */
-void loop() {
-  
-  long now = millis();
-  if (now - lastMsg > timeInterval ) {
-    lastMsg = now;
-    if (!client.connected()) {
-      reconnect();
-    }
-    client.loop();
-  
-    Serial.print("Humidity: ");
-    Serial.print(sensorBME280.readFloatHumidity(), 0);
-    
-    Serial.print(" Pressure: ");
-    Serial.print(sensorBME280.readFloatPressure(), 0);
-    
-    Serial.print(" Alt: ");
-    Serial.print(sensorBME280.readFloatAltitudeMeters(), 1);
-    
-    Serial.print(" Temp: ");
-    Serial.print(sensorBME280.readTempC(), 2);
-    
-    Serial.println();
-
-    if(ccs.available()){
-      if(!ccs.readData()){
-        Serial.print("CO2: ");
-        Serial.print(ccs.geteCO2());
-        Serial.print("ppm, TVOC: ");
-        Serial.println(ccs.getTVOC());
-        // String json = "{\"user\":\""+(String)mqtt_user+"\",\"Humidity\":\""+(String)sensorBME280.readFloatHumidity()+"\",\"Pressure\":\""+(String)sensorBME280.readFloatPressure()+"\",\"Altitude\":\""+(String)sensorBME280.readFloatAltitudeMeters()+"\",\"Temperature\":\""+(String)sensorBME280.readTempC()+"\"}";
-        String json = "{\"user\":\""+(String)mqtt_user+"\",\"CO2\":\""+(String)ccs.geteCO2()+"\",\"TVOC\":\""+(String)ccs.getTVOC()+"\",\"Humidity\":\""+(String)sensorBME280.readFloatHumidity()+"\",\"Pressure\":\""+(String)sensorBME280.readFloatPressure()+"\",\"Altitude\":\""+(String)sensorBME280.readFloatAltitudeMeters()+"\",\"Temperature\":\""+(String)sensorBME280.readTempC()+"\"}";
-        client.publish(mqtt_output, json.c_str() );
-        //client.disconnect();
-
-        Serial.println("Mqtt sent to : " + (String)mqtt_output );
-        Serial.println(json);
-      }
-      else{
-        String errorMsg = "ERROR on CCS811 !";
-        String logType = "ERROR";
-        String json = "{\"user\":\""+(String)mqtt_user +"\",\"logType\":\""+logType+"\",\"logMessage\":\""+errorMsg +"\"}";
-        client.publish(mqtt_log, json.c_str() );
-        //client.disconnect();
-
-        // Serial.println("Mqtt sent to : " + (String)mqtt_log );
-        // Serial.println(json);
-        // //while(1);
-        // Serial.println("Restarting... ");
-        // //ESP.restart();
-      }
-    }
-  delay(500);
 
   }
 }
