@@ -28,8 +28,11 @@
 #include <DallasTemperature.h>
 
 // DEfine the WIRE onto ESP32
-#define ONE_WIRE_BUS 4 
+#define ONE_WIRE_BUS 14 
 OneWire oneWire(ONE_WIRE_BUS); 
+// variable to hold device addresses
+DeviceAddress Thermometer;
+int deviceCount = 0;
 DallasTemperature sensorDS18B20(&oneWire);
 
 BME280 sensorBME280;
@@ -80,10 +83,33 @@ void setup()
       Serial.println("CCS811 started");
     }
 
-    //DS18B20 Sensor
+    /* ************************ */
+    /*  DS18B20 Sensor          */
+    /* ************************ */
     Serial.println("DS18B20 Dallas Temperature begin"); 
     sensorDS18B20.begin(); 
+    // locate devices on the bus
+    Serial.println("Locating devices...");
+    Serial.print("Found ");
+    deviceCount = sensorDS18B20.getDeviceCount();   // counting number of devices on the bus
+    Serial.print(deviceCount, DEC);
+    Serial.println(" devices.");
+    Serial.println("");
+  
+    Serial.println("Printing addresses...");
+    for (int i = 0;  i < deviceCount;  i++)
+    {
+      Serial.print("Sensor ");
+      Serial.print(i+1);
+      Serial.print(" : ");
+      sensorDS18B20.getAddress(Thermometer, i);   // get each DS18b20 64bits address
+      printAddress(Thermometer);            // function at the end of this code
+      //Serial.print(Thermometer);
+    }
 
+    /* ********************* */
+    /*  BME280 SENSOR        */ 
+    /* ********************* */
     Serial.println("BME280 begin");
     // I2C device found at address 0x76
     Wire.begin();
@@ -166,6 +192,22 @@ void loop() {
   delay(500);
 
   }
+}
+
+/* ----------------------
+ *  printAddress 
+ *  ---------------------
+ */
+void printAddress(DeviceAddress deviceAddress)
+{ 
+  for (uint8_t i = 0; i < 8; i++)
+  {
+    Serial.print("0x");
+    if (deviceAddress[i] < 0x10) Serial.print("0");
+    Serial.print(deviceAddress[i], HEX);
+    if (i < 7) Serial.print(", ");
+  }
+  Serial.println("");
 }
 
 /* ----------------------
