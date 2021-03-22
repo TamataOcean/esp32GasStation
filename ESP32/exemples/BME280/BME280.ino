@@ -1,7 +1,6 @@
-/*
+/* ********************************************************************** 
 * Description:
 * This sample code is mainly used to monitor sensorHub and sending through Mqtt Json data
-* temperature, dissolved oxygen, ec and orp,etc.
 *
 * Software Environment: Arduino IDE 1.8.9
 * Software download link: https://www.arduino.cc/en/Main/Software
@@ -14,33 +13,14 @@
 *
 * author  :  Rominco(rtourte@yahoo.fr)
 * version :  V1.0
-* date    :  2019-09-23
-**********************************************************************
- */
+* date    :  2021-03-22
+********************************************************************** */
 
 #include <WiFi.h>
 #include <PubSubClient.h>
-#include "Adafruit_CCS811.h"
 #include "SparkFunBME280.h"
 
-// DS18B20 Library
-#include <OneWire.h> 
-#include <DallasTemperature.h>
-
-// DEfine the WIRE onto ESP32
-#define ONE_WIRE_BUS 14 
-OneWire oneWire(ONE_WIRE_BUS); 
-// variable to hold device addresses
-DeviceAddress Thermometer;
-int deviceCount = 0;
-DallasTemperature sensorDS18B20(&oneWire);
-
 BME280 sensorBME280;
-Adafruit_CCS811 ccs;
-
-// const char* ssid     = "OiO";
-// const char* password = "oceanisopen";
-// const char* mqtt_server = "172.24.1.1";
 
 const char* ssid     = "WifiRaspi";
 const char* password = "wifiraspi";
@@ -48,7 +28,7 @@ const char* mqtt_server = "172.24.1.1";
 const char* mqtt_output = "esp32/update";
 const char* mqtt_input = "esp32/input";
 const char* mqtt_log = "esp32/log";
-const char* mqtt_user = "ESP32_Proto_Bureau";
+const char* mqtt_user = "ESP32_BME280";
 
 const int ledPin = 4;
 int timeInterval = 7500;
@@ -72,41 +52,6 @@ void setup()
     client.setServer(mqtt_server, 1883);
     client.setCallback(callback);
 
-    //CO2 Sensors 
-    Serial.println("CCS811 begin");
-    if(!ccs.begin(0x5A)){
-      Serial.println("Failed to start sensor! Please check your wiring.");
-      while(1);
-    }
-    else
-    {
-      Serial.println("CCS811 started");
-    }
-
-    /* ************************ */
-    /*  DS18B20 Sensor          */
-    /* ************************ */
-    Serial.println("DS18B20 Dallas Temperature begin"); 
-    sensorDS18B20.begin(); 
-    // locate devices on the bus
-    Serial.println("Locating devices...");
-    Serial.print("Found ");
-    deviceCount = sensorDS18B20.getDeviceCount();   // counting number of devices on the bus
-    Serial.print(deviceCount, DEC);
-    Serial.println(" devices.");
-    Serial.println("");
-  
-    Serial.println("Printing addresses...");
-    for (int i = 0;  i < deviceCount;  i++)
-    {
-      Serial.print("Sensor ");
-      Serial.print(i+1);
-      Serial.print(" : ");
-      sensorDS18B20.getAddress(Thermometer, i);   // get each DS18b20 64bits address
-      printAddress(Thermometer);            // function at the end of this code
-      //Serial.print(Thermometer);
-    }
-
     /* ********************* */
     /*  BME280 SENSOR        */ 
     /* ********************* */
@@ -122,7 +67,6 @@ void setup()
     {
       Serial.println("BME280 started & configured");
     }
-
 }
 
 
@@ -140,13 +84,6 @@ void loop() {
       reconnect();
     }
     client.loop();
-  
-    Serial.print(" Requesting temperatures..."); 
-    sensorDS18B20.requestTemperatures();
-    Serial.println("DONE"); 
-
-    Serial.print(" Water Temperature : ");
-    Serial.print(sensorDS18B20.getTempCByIndex(0), 2);
     
     Serial.print(" Air Temperature : ");
     Serial.print(sensorBME280.readTempC(), 2);
@@ -161,53 +98,14 @@ void loop() {
     Serial.print(sensorBME280.readFloatAltitudeMeters(), 1);
     Serial.println();
 
-    if(ccs.available()){
-      if(!ccs.readData()){
-        Serial.print("CO2: ");
-        Serial.print(ccs.geteCO2());
-        Serial.print("ppm, TVOC: ");
-        Serial.println(ccs.getTVOC());
-        // String json = "{\"user\":\""+(String)mqtt_user+"\",\"Humidity\":\""+(String)sensorBME280.readFloatHumidity()+"\",\"Pressure\":\""+(String)sensorBME280.readFloatPressure()+"\",\"Altitude\":\""+(String)sensorBME280.readFloatAltitudeMeters()+"\",\"Temperature\":\""+(String)sensorBME280.readTempC()+"\"}";
-        String json = "{\"user\":\""+(String)mqtt_user+"\",\"CO2\":\""+(String)ccs.geteCO2()+"\",\"TVOC\":\""+(String)ccs.getTVOC()+"\",\"Humidity\":\""+(String)sensorBME280.readFloatHumidity()+"\",\"Pressure\":\""+(String)sensorBME280.readFloatPressure()+"\",\"Altitude\":\""+(String)sensorBME280.readFloatAltitudeMeters()+"\",\"AirTemperature\":\""+(String)sensorBME280.readTempC()+"\",\"WaterTemperature\":\""+(String)sensorDS18B20.getTempCByIndex(0)+"\"}";
-        client.publish(mqtt_output, json.c_str() );
-        //client.disconnect();
 
-        Serial.println("Mqtt sent to : " + (String)mqtt_output );
-        Serial.println(json);
-      }
-      else{
-        String errorMsg = "ERROR on CCS811 !";
-        String logType = "ERROR";
-        String json = "{\"user\":\""+(String)mqtt_user +"\",\"logType\":\""+logType+"\",\"logMessage\":\""+errorMsg +"\"}";
-        client.publish(mqtt_log, json.c_str() );
-        //client.disconnect();
+    String json = "{\"user\":\""+(String)mqtt_user+"\",\"Humidity\":\""+(String)sensorBME280.readFloatHumidity()+"\",\"Pressure\":\""+(String)sensorBME280.readFloatPressure()+"\",\"Altitude\":\""+(String)sensorBME280.readFloatAltitudeMeters()+"\",\"AirTemperature\":\""+(String)sensorBME280.readTempC()+"\"}";
+    client.publish(mqtt_output, json.c_str() );
 
-        // Serial.println("Mqtt sent to : " + (String)mqtt_log );
-        // Serial.println(json);
-        // //while(1);
-        // Serial.println("Restarting... ");
-        // //ESP.restart();
-      }
-    }
-  delay(500);
-
+    Serial.println("Mqtt sent to : " + (String)mqtt_output );
+    Serial.println(json);
+    delay(500);
   }
-}
-
-/* ----------------------
- *  printAddress 
- *  ---------------------
- */
-void printAddress(DeviceAddress deviceAddress)
-{ 
-  for (uint8_t i = 0; i < 8; i++)
-  {
-    Serial.print("0x");
-    if (deviceAddress[i] < 0x10) Serial.print("0");
-    Serial.print(deviceAddress[i], HEX);
-    if (i < 7) Serial.print(", ");
-  }
-  Serial.println("");
 }
 
 /* ----------------------
