@@ -14,7 +14,7 @@
 *
 * author  :  Rominco(rtourte@yahoo.fr)
 * version :  V1.0
-* date    :  2019-09-23
+* date    :  2021-03-29
 **********************************************************************
  */
 
@@ -38,17 +38,13 @@ DallasTemperature sensorDS18B20(&oneWire);
 BME280 sensorBME280;
 Adafruit_CCS811 ccs;
 
-// const char* ssid     = "OiO";
-// const char* password = "oceanisopen";
-// const char* mqtt_server = "172.24.1.1";
-
 const char* ssid     = "WifiRaspi";
 const char* password = "wifiraspi";
 const char* mqtt_server = "172.24.1.1";
 const char* mqtt_output = "esp32/update";
 const char* mqtt_input = "esp32/input";
 const char* mqtt_log = "esp32/log";
-const char* mqtt_user = "ESP32_Proto_Bureau";
+const char* mqtt_user = "ESP32_Proto_Exemple";
 
 const int ledPin = 4;
 int timeInterval = 7500;
@@ -71,17 +67,6 @@ void setup()
     setup_wifi();
     client.setServer(mqtt_server, 1883);
     client.setCallback(callback);
-
-    //CO2 Sensors 
-    Serial.println("CCS811 begin");
-    if(!ccs.begin(0x5A)){
-      Serial.println("Failed to start sensor! Please check your wiring.");
-      while(1);
-    }
-    else
-    {
-      Serial.println("CCS811 started");
-    }
 
     /* ************************ */
     /*  DS18B20 Sensor          */
@@ -125,7 +110,6 @@ void setup()
 
 }
 
-
 /* 
  *  ------------------
  *  MAIN LOOP
@@ -137,6 +121,7 @@ void loop() {
   if (now - lastMsg > timeInterval ) {
     lastMsg = now;
     if (!client.connected()) {
+      Serial.println("Reconnect to Mqtt");
       reconnect();
     }
     client.loop();
@@ -161,36 +146,13 @@ void loop() {
     Serial.print(sensorBME280.readFloatAltitudeMeters(), 1);
     Serial.println();
 
-    if(ccs.available()){
-      if(!ccs.readData()){
-        Serial.print("CO2: ");
-        Serial.print(ccs.geteCO2());
-        Serial.print("ppm, TVOC: ");
-        Serial.println(ccs.getTVOC());
-        // String json = "{\"user\":\""+(String)mqtt_user+"\",\"Humidity\":\""+(String)sensorBME280.readFloatHumidity()+"\",\"Pressure\":\""+(String)sensorBME280.readFloatPressure()+"\",\"Altitude\":\""+(String)sensorBME280.readFloatAltitudeMeters()+"\",\"Temperature\":\""+(String)sensorBME280.readTempC()+"\"}";
-        String json = "{\"user\":\""+(String)mqtt_user+"\",\"CO2\":\""+(String)ccs.geteCO2()+"\",\"TVOC\":\""+(String)ccs.getTVOC()+"\",\"Humidity\":\""+(String)sensorBME280.readFloatHumidity()+"\",\"Pressure\":\""+(String)sensorBME280.readFloatPressure()+"\",\"Altitude\":\""+(String)sensorBME280.readFloatAltitudeMeters()+"\",\"AirTemperature\":\""+(String)sensorBME280.readTempC()+"\",\"WaterTemperature\":\""+(String)sensorDS18B20.getTempCByIndex(0)+"\"}";
-        client.publish(mqtt_output, json.c_str() );
-        //client.disconnect();
+    String json = "{\"user\":\""+(String)mqtt_user+"\",\"Humidity\":\""+(String)sensorBME280.readFloatHumidity()+"\",\"Pressure\":\""+(String)sensorBME280.readFloatPressure()+"\",\"Altitude\":\""+(String)sensorBME280.readFloatAltitudeMeters()+"\",\"AirTemperature\":\""+(String)sensorBME280.readTempC()+"\",\"WaterTemperature\":\""+(String)sensorDS18B20.getTempCByIndex(0)+"\"}";
+    client.publish(mqtt_output, json.c_str() );
+    client.disconnect();
 
-        Serial.println("Mqtt sent to : " + (String)mqtt_output );
-        Serial.println(json);
-      }
-      else{
-        String errorMsg = "ERROR on CCS811 !";
-        String logType = "ERROR";
-        String json = "{\"user\":\""+(String)mqtt_user +"\",\"logType\":\""+logType+"\",\"logMessage\":\""+errorMsg +"\"}";
-        client.publish(mqtt_log, json.c_str() );
-        //client.disconnect();
-
-        // Serial.println("Mqtt sent to : " + (String)mqtt_log );
-        // Serial.println(json);
-        // //while(1);
-        // Serial.println("Restarting... ");
-        // //ESP.restart();
-      }
-    }
-  delay(500);
-
+    Serial.println("Mqtt sent to : " + (String)mqtt_output );
+    Serial.println(json);
+    delay(500);
   }
 }
 
