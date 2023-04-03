@@ -1,1 +1,1 @@
-influx -database 'datagas' -execute "SELECT * from sensor where (\"user\" = 'USER NAME')" -format csv > USER_NAME.csv
+influx -database 'datagas' -execute "SELECT * from sensor where (\"user\" = 'USER NAME')" -precision rfc3339 -format csv > USER_NAME.csv
