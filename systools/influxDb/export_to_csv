@@ -1,1 +1,0 @@
-influx -database 'datagas' -execute "SELECT * from sensor where (\"user\" = 'USER_NAME')" -format csv > USER_NAME.csv 

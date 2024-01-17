@@ -1,2 +1,0 @@
-mosquitto_sub -h MQTT_SERVER_IP -d -t '#'
-
