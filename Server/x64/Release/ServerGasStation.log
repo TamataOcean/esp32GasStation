@@ -1,0 +1,30 @@
+﻿  Observateur.cpp
+  ObsMosquito.cpp
+     Création de la bibliothèque C:\Users\Goura\source\repos\ServerGasStation\x64\Release\ServerGasStation.lib et de l'objet C:\Users\Goura\source\repos\ServerGasStation\x64\Release\ServerGasStation.exp
+  Génération de code en cours
+  Compiler switch has changed, fall back to full compilation.
+  All 434 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Fin de la génération du code
+mysqlcppconn-static.lib(mysql_driver.obj) : warning LNK4099: PDB '' n'a pu être trouvé avec 'mysqlcppconn-static.lib(mysql_driver.obj)' ou sur '' ; l'objet sera lié sans informations de débogage
+mysqlcppconn-static.lib(mysql_connection.obj) : warning LNK4099: PDB '' n'a pu être trouvé avec 'mysqlcppconn-static.lib(mysql_connection.obj)' ou sur '' ; l'objet sera lié sans informations de débogage
+mysqlcppconn-static.lib(mysql_native_driver_wrapper.obj) : warning LNK4099: PDB '' n'a pu être trouvé avec 'mysqlcppconn-static.lib(mysql_native_driver_wrapper.obj)' ou sur '' ; l'objet sera lié sans informations de débogage
+mysqlcppconn-static.lib(mysql_uri.obj) : warning LNK4099: PDB '' n'a pu être trouvé avec 'mysqlcppconn-static.lib(mysql_uri.obj)' ou sur '' ; l'objet sera lié sans informations de débogage
+mysqlcppconn-static.lib(mysql_metadata.obj) : warning LNK4099: PDB '' n'a pu être trouvé avec 'mysqlcppconn-static.lib(mysql_metadata.obj)' ou sur '' ; l'objet sera lié sans informations de débogage
+mysqlcppconn-static.lib(mysql_warning.obj) : warning LNK4099: PDB '' n'a pu être trouvé avec 'mysqlcppconn-static.lib(mysql_warning.obj)' ou sur '' ; l'objet sera lié sans informations de débogage
+mysqlcppconn-static.lib(mysql_prepared_statement.obj) : warning LNK4099: PDB '' n'a pu être trouvé avec 'mysqlcppconn-static.lib(mysql_prepared_statement.obj)' ou sur '' ; l'objet sera lié sans informations de débogage
+mysqlcppconn-static.lib(mysql_statement.obj) : warning LNK4099: PDB '' n'a pu être trouvé avec 'mysqlcppconn-static.lib(mysql_statement.obj)' ou sur '' ; l'objet sera lié sans informations de débogage
+mysqlcppconn-static.lib(mysql_debug.obj) : warning LNK4099: PDB '' n'a pu être trouvé avec 'mysqlcppconn-static.lib(mysql_debug.obj)' ou sur '' ; l'objet sera lié sans informations de débogage
+mysqlcppconn-static.lib(mysql_client_api.obj) : warning LNK4099: PDB '' n'a pu être trouvé avec 'mysqlcppconn-static.lib(mysql_client_api.obj)' ou sur '' ; l'objet sera lié sans informations de débogage
+mysqlcppconn-static.lib(mysql_native_connection_wrapper.obj) : warning LNK4099: PDB '' n'a pu être trouvé avec 'mysqlcppconn-static.lib(mysql_native_connection_wrapper.obj)' ou sur '' ; l'objet sera lié sans informations de débogage
+mysqlcppconn-static.lib(mysql_util.obj) : warning LNK4099: PDB '' n'a pu être trouvé avec 'mysqlcppconn-static.lib(mysql_util.obj)' ou sur '' ; l'objet sera lié sans informations de débogage
+mysqlcppconn-static.lib(mysql_art_resultset.obj) : warning LNK4099: PDB '' n'a pu être trouvé avec 'mysqlcppconn-static.lib(mysql_art_resultset.obj)' ou sur '' ; l'objet sera lié sans informations de débogage
+mysqlcppconn-static.lib(mysql_resultbind.obj) : warning LNK4099: PDB '' n'a pu être trouvé avec 'mysqlcppconn-static.lib(mysql_resultbind.obj)' ou sur '' ; l'objet sera lié sans informations de débogage
+mysqlcppconn-static.lib(mysql_ps_resultset.obj) : warning LNK4099: PDB '' n'a pu être trouvé avec 'mysqlcppconn-static.lib(mysql_ps_resultset.obj)' ou sur '' ; l'objet sera lié sans informations de débogage
+mysqlcppconn-static.lib(mysql_ps_resultset_metadata.obj) : warning LNK4099: PDB '' n'a pu être trouvé avec 'mysqlcppconn-static.lib(mysql_ps_resultset_metadata.obj)' ou sur '' ; l'objet sera lié sans informations de débogage
+mysqlcppconn-static.lib(mysql_parameter_metadata.obj) : warning LNK4099: PDB '' n'a pu être trouvé avec 'mysqlcppconn-static.lib(mysql_parameter_metadata.obj)' ou sur '' ; l'objet sera lié sans informations de débogage
+mysqlcppconn-static.lib(mysql_resultset.obj) : warning LNK4099: PDB '' n'a pu être trouvé avec 'mysqlcppconn-static.lib(mysql_resultset.obj)' ou sur '' ; l'objet sera lié sans informations de débogage
+mysqlcppconn-static.lib(mysql_native_resultset_wrapper.obj) : warning LNK4099: PDB '' n'a pu être trouvé avec 'mysqlcppconn-static.lib(mysql_native_resultset_wrapper.obj)' ou sur '' ; l'objet sera lié sans informations de débogage
+mysqlcppconn-static.lib(mysql_native_statement_wrapper.obj) : warning LNK4099: PDB '' n'a pu être trouvé avec 'mysqlcppconn-static.lib(mysql_native_statement_wrapper.obj)' ou sur '' ; l'objet sera lié sans informations de débogage
+mysqlcppconn-static.lib(mysql_art_rset_metadata.obj) : warning LNK4099: PDB '' n'a pu être trouvé avec 'mysqlcppconn-static.lib(mysql_art_rset_metadata.obj)' ou sur '' ; l'objet sera lié sans informations de débogage
+mysqlcppconn-static.lib(mysql_resultset_metadata.obj) : warning LNK4099: PDB '' n'a pu être trouvé avec 'mysqlcppconn-static.lib(mysql_resultset_metadata.obj)' ou sur '' ; l'objet sera lié sans informations de débogage
+  ServerGasStation.vcxproj -> C:\Users\Goura\source\repos\ServerGasStation\x64\Release\ServerGasStation.exe

@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Fichiers sources">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Fichiers d%27en-tête">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Fichiers de ressources">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Fichiers sources\Conf">
+      <UniqueIdentifier>{7220ff01-21e5-4842-96b2-d52fc41e0342}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\DatabaseManager">
+      <UniqueIdentifier>{b6233c62-d95d-488f-b76a-d2d38c48bd58}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Fichiers sources\Observer">
+      <UniqueIdentifier>{ccef4f77-f7c1-4a49-bb02-2a7391cbaed2}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ServerGasStation.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Conf\Conf.cpp">
+      <Filter>Fichiers sources\Conf</Filter>
+    </ClCompile>
+    <ClCompile Include="DatabaseManager\DatabaseManager.cpp">
+      <Filter>Fichiers sources\DatabaseManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Observer\Mosquito.cpp">
+      <Filter>Fichiers sources\Observer</Filter>
+    </ClCompile>
+    <ClCompile Include="Observer\Observateur.cpp">
+      <Filter>Fichiers sources\Observer</Filter>
+    </ClCompile>
+    <ClCompile Include="Observer\ObsMosquito.cpp">
+      <Filter>Fichiers sources\Observer</Filter>
+    </ClCompile>
+    <ClCompile Include="Observer\Sujet.cpp">
+      <Filter>Fichiers sources\Observer</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Conf\Conf.h">
+      <Filter>Fichiers sources\Conf</Filter>
+    </ClInclude>
+    <ClInclude Include="DatabaseManager\DatabaseManager.h">
+      <Filter>Fichiers sources\DatabaseManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Observer\Mosquito.h">
+      <Filter>Fichiers sources\Observer</Filter>
+    </ClInclude>
+    <ClInclude Include="Observer\Observateur.h">
+      <Filter>Fichiers sources\Observer</Filter>
+    </ClInclude>
+    <ClInclude Include="Observer\ObsMosquito.h">
+      <Filter>Fichiers sources\Observer</Filter>
+    </ClInclude>
+    <ClInclude Include="Observer\Sujet.h">
+      <Filter>Fichiers sources\Observer</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
