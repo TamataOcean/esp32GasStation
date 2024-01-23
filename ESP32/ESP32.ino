@@ -45,6 +45,8 @@ const char* mqtt_output = "esp32/update";
 const char* mqtt_input = "esp32/input";
 const char* mqtt_log = "esp32/log";
 const char* mqtt_user = "ESP32_Proto_Exemple";
+const char* mqtt_password = "password";
+const char mqtt_UUID[] = "UNIV_PUT_YOUR_UNIQUE_NAME";
 
 const int ledPin = 4;
 int timeInterval = 7500;
@@ -205,7 +207,8 @@ void reconnect() {
     delay(100);
     Serial.print("Attempting MQTT connection...");
     // Attempt to connect
-    if (client.connect("ESP8266Client")) {
+    if (client.connect(mqtt_UUID , mqtt_user, mqtt_password )) {
+    //if (client.connect("ESP8266Client")) {
       Serial.println("connected");
       // Subscribe
       client.subscribe(mqtt_input);
