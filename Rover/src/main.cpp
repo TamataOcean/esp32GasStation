@@ -2,6 +2,10 @@
 
 // SystemManager :
 #include "SystemManager.h"
+#include "SensorHub.h"
+
+SensorHub sensors;
+
 SystemManager systemManager;
 
 // MQTT : 
@@ -13,14 +17,14 @@ PubSubClient client(espClient);
 
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
   systemManager.init();
 }
 
 void loop() {
     client.loop();
     systemManager.loop();
-    //Serial.println(systemManager.getJsonInfo());
+    // Serial.println(systemManager.getJsonInfo());
 
 
     delay(20000);
