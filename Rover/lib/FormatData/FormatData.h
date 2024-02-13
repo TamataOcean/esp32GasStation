@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 #include <FormatData.h>
-#include <String.h>
+// #include <string.h>
 #include <Sensor.h>
 #include <SensorHub.h>
 #include <SensorTemp.h>

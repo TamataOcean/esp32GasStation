@@ -1,5 +1,7 @@
 #include "Sensor.h"
 
+Sensor::~Sensor() {}
+
 String Sensor::getName() {
     return this->name;
 }
@@ -55,3 +57,4 @@ String Sensor::getReturnType() {
 void Sensor::setReturnType(String type) {
     this->returnType = type;
 }
+

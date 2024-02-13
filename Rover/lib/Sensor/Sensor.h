@@ -12,7 +12,8 @@ class Sensor
             // Virtuals (Surcharge)
             virtual void setup(TwoWire& i2cBus) = 0;
             virtual void update() = 0;
-            virtual Data<double> getData();
+            virtual Data<double> getData() = 0;
+            virtual ~Sensor() = 0;
             
             // Globals
             String getName();
@@ -29,7 +30,6 @@ class Sensor
             void setMac(String mac);
             String getReturnType();
             void setReturnType(String returnType);
-            
     private:
             String name;
             String nameData;

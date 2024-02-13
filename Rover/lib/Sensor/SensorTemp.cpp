@@ -2,7 +2,7 @@
 #include <Arduino.h>
 #include <Data.h>
 #include "SensorTemp.h"
-#include <String.h>
+// #include <string.h>
 
 
 double i = 0;
@@ -43,7 +43,6 @@ Data<double> SensorTemp::getData() {
     return temperatureData;
 }
 
-
 SensorTemp::SensorTemp(int pin) {
     this->setName("BME280");
     this->setNameData("Temperature");
@@ -56,3 +55,7 @@ SensorTemp::SensorTemp(int pin) {
 SensorTemp::~SensorTemp() {
     
 }
+
+// Sensor::~Sensor() {
+
+// }

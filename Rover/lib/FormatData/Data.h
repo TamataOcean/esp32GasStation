@@ -27,6 +27,6 @@ private:
 };
 
 // Inclusion de la définition de la classe puisque le code est inclus dans l'en-tête
-#include "data.cpp"
+#include "Data.cpp"
 
 #endif // DATA_H

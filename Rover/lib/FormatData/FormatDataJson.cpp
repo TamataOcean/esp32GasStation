@@ -2,13 +2,10 @@
 #include "FormatDataJson.h"
 #include <iostream>
 #include <Arduino.h>
-#include <String.h>
+// #include <String.h>
 #include <Data.h>
 #include <Sensor.h>
 #include <SensorHub.h>
-
-int countSensor = 0;
-
 
 String FormatDataJson::FormatFromData(Data<double> myDataObject){
     String json = "{\"dataName\":\"" + String(myDataObject.getDataName().c_str()) + "\",\"value\":\""+ String(myDataObject.getValue())+ " unit\":\"" + String(myDataObject.getUnit().c_str()) + "\"}";
