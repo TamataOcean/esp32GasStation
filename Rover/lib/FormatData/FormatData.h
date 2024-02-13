@@ -2,7 +2,6 @@
 #define FormatData_H
 
 #include <Arduino.h>
-#include <Capteur.h>
 #include <FormatData.h>
 #include <String.h>
 #include <Sensor.h>
@@ -13,7 +12,7 @@ template <typename T>
 
 class FormatData {
     public:
-     String StringSensorInformation(SensorHub mySensorHub);
+    String StringSensorInformation(SensorHub mySensorHub);
     String FormatSensorData(SensorHub mySensorHub);
     String close(String json);
     String concatenate(String texts[]);
